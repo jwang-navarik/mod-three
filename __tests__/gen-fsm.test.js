@@ -1,30 +1,33 @@
 const genFsm = require('../src/gen-fsm')
 
-const fsm = genFsm(
-  ['S0', 'S1', 'S2'],
-  ['0', '1'],
-  'S0',
-  ['S0', 'S1', 'S2'],
-  (state, char) => {
-    const map = {
-      S0: {
-        0: 'S0',
-        1: 'S1',
-      },
-      S1: {
-        0: 'S2',
-        1: 'S0',
-      },
-      S2: {
-        0: 'S1',
-        1: 'S2',
-      },
-    }
-    return map[state][char]
-  },
-)
-
 describe('#### fsm tests ####', () => {
+  let fsm
+  beforeEach(() => {
+    fsm = genFsm(
+      ['S0', 'S1', 'S2'],
+      ['0', '1'],
+      'S0',
+      ['S0', 'S1', 'S2'],
+      (state, char) => {
+        const map = {
+          S0: {
+            0: 'S0',
+            1: 'S1',
+          },
+          S1: {
+            0: 'S2',
+            1: 'S0',
+          },
+          S2: {
+            0: 'S1',
+            1: 'S2',
+          },
+        }
+        return map[state][char]
+      },
+    )
+  })
+
   it('Test initial state', () => {
     const {
       getState,
@@ -34,7 +37,7 @@ describe('#### fsm tests ####', () => {
 
   it('Test setState', () => {
     const { VALID_STATES, getState, setState } = fsm
-    const [S2] = VALID_STATES
+    const [, S2] = VALID_STATES
     setState(S2)
     expect(getState()).toBe(S2)
   })
